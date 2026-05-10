@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quanto você me conhece? 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--rose:#d4537e;--rose-light:#f0a0bc;--rose-dark:#8a2040;--muted:rgba(220,170,200,0.65)}
+html,body{height:100%;background:#080510}
+#app{font-family:'DM Sans',sans-serif;background:radial-gradient(ellipse at 25% 15%,#1e0830 0%,#080510 55%,#050310 100%);min-height:100vh;position:relative;color:#f0e8f0}
+#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
+.screen{display:none;position:relative;z-index:2}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:3rem 2rem;text-align:center}
+.env-scene{width:130px;height:90px;position:relative;margin:0 auto 2.5rem;filter:drop-shadow(0 12px 32px rgba(212,83,126,0.3))}
+.env-body{position:absolute;inset:0;background:linear-gradient(160deg,#2e1030 0%,#1c0a22 100%);border:1px solid rgba(212,83,126,0.35);border-radius:3px 3px 6px 6px}
+.env-body::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.18) 0%,transparent 50%),linear-gradient(225deg,rgba(0,0,0,0.18) 0%,transparent 50%)}
+.env-body::after{content:'';position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:64px;height:1px;background:rgba(212,83,126,0.18);box-shadow:0 7px 0 rgba(212,83,126,0.12),0 14px 0 rgba(212,83,126,0.07)}
+.env-flap-top{position:absolute;top:0;left:0;right:0;overflow:hidden;height:46px}
+.env-flap-top svg{width:100%;display:block}
+.env-seal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px;background:linear-gradient(135deg,var(--rose),var(--rose-dark));border-radius:50%;display:grid;place-items:center;font-size:12px;color:#fff;animation:seal-pulse 2.2s ease-in-out infinite;z-index:3}
+@keyframes seal-pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,83,126,0.5),0 0 14px rgba(212,83,126,0.4)}50%{box-shadow:0 0 0 6px rgba(212,83,126,0),0 0 26px rgba(212,83,126,0.7)}}
+.sparkle{position:absolute;border-radius:50%;background:var(--rose-light);animation:sp-float linear infinite;opacity:0}
+@keyframes sp-float{0%{transform:translateY(0) scale(1);opacity:0.7}100%{transform:translateY(-36px) scale(0);opacity:0}}
+.eyebrow{font-size:10px;letter-spacing:3px;color:var(--rose);text-transform:uppercase;margin-bottom:1rem;opacity:0.8}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:#fff;line-height:1.15;margin-bottom:0.25rem;max-width:400px}
+.hero-name em{font-style:italic;color:var(--rose-light)}
+.ornament{display:flex;align-items:center;gap:10px;width:200px;margin:1.5rem auto}
+.orn-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,83,126,0.4))}
+.orn-line.r{background:linear-gradient(270deg,transparent,rgba(212,83,126,0.4))}
+.orn-dia{width:6px;height:6px;background:var(--rose);transform:rotate(45deg)}
+.intro-text{font-size:15px;color:var(--muted);line-height:1.9;white-space:pre-line;max-width:320px;margin-bottom:2.5rem}
+.cta{padding:14px 52px;background:linear-gradient(135deg,var(--rose),var(--rose-dark));color:#fff;border:none;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.3s;letter-spacing:0.5px;box-shadow:0 0 40px rgba(212,83,126,0.3)}
+.cta:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(212,83,126,0.5)}
+#s-quiz.active{align-items:stretch;justify-content:flex-start;padding:2.5rem 2rem;text-align:left;max-width:600px;margin:0 auto;width:100%}
+.tl{display:flex;align-items:center;gap:5px;margin-bottom:2rem;flex-wrap:wrap}
+.tl-d{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.1);flex-shrink:0;transition:all 0.4s}
+.tl-d.done{background:var(--rose-dark)}.tl-d.now{background:var(--rose-light);box-shadow:0 0 0 3px rgba(212,83,126,0.2)}
+.tl-l{flex:1;height:1px;background:rgba(255,255,255,0.07);min-width:4px}
+.q-tag{font-size:10px;letter-spacing:3px;color:var(--rose);text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:6px}
+.tag-badge{padding:2px 10px;border-radius:100px;font-size:10px;letter-spacing:1px;border:1px solid}
+.tag-badge.memoria{color:#a0c4ff;border-color:rgba(160,196,255,0.3);background:rgba(160,196,255,0.07)}
+.tag-badge.sobre{color:#c4ffa0;border-color:rgba(196,255,160,0.3);background:rgba(196,255,160,0.07)}
+.tag-badge.picante{color:#ffb3c6;border-color:rgba(255,179,198,0.4);background:rgba(255,100,130,0.1)}
+.tag-badge.divertida{color:#ffd6a0;border-color:rgba(255,214,160,0.3);background:rgba(255,180,80,0.07)}
+.q-tx{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:#fff;line-height:1.45;margin-bottom:2rem}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{padding:13px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:rgba(255,255,255,0.03);color:rgba(220,190,210,0.85);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;text-align:left;line-height:1.45;transition:all 0.2s}
+.opt:hover{border-color:rgba(212,83,126,0.5);background:rgba(212,83,126,0.08);color:#fff;transform:translateY(-1px)}
+.opt.correct{background:rgba(212,83,126,0.18);border-color:var(--rose);color:#ffd0e0}
+.opt.wrong{opacity:0.15;pointer-events:none}.opt.off{pointer-events:none}
+.fb-box{margin-top:1.25rem;padding:1rem 1.25rem;background:rgba(212,83,126,0.08);border-left:2px solid var(--rose);border-radius:0 10px 10px 0}
+.fb-box p{font-size:14px;color:var(--muted);line-height:1.7;font-style:italic}
+
+/* ── PRÓXIMA PERGUNTA ── */
+.next-btn{
+  margin-top:1.25rem;display:inline-flex;align-items:center;gap:8px;
+  padding:10px 24px;background:transparent;
+  border:1px solid rgba(212,83,126,0.35);border-radius:100px;
+  font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--rose-light);cursor:pointer;transition:all 0.2s;
+  animation:fadeIn 0.4s ease;
+}
+.next-btn:hover{background:rgba(212,83,126,0.1);border-color:var(--rose)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESULTADO ── */
+#s-result.active{justify-content:center}
+.score-ring{width:180px;height:180px;position:relative;margin:0 auto 2.25rem}
+.score-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.score-ring circle{fill:none;stroke-width:6;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)}
+.score-ring .bg{stroke:rgba(255,255,255,0.07)}
+.score-ring .fg{stroke:url(#grad);stroke-linecap:round}
+.score-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.score-big{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:300;color:#fff;line-height:1;letter-spacing:-1px}
+.score-denom{font-size:14px;color:var(--muted);letter-spacing:1px}
+.result-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:#fff;margin-bottom:1rem;line-height:1.3;max-width:380px}
+.result-msg{font-size:15px;color:var(--muted);line-height:1.9;white-space:pre-line;max-width:360px;margin:0 auto 2rem}
+.btn-restart{padding:13px 40px;background:transparent;border:1px solid rgba(212,83,126,0.4);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--rose-light);cursor:pointer;transition:all 0.3s}
+.btn-restart:hover{background:rgba(212,83,126,0.12);border-color:var(--rose)}
+</style>
+</head>
+<body>
+<div id="app">
+  <canvas id="cvs"></canvas>
+
+  <div class="screen active" id="s-intro">
+    <div class="env-scene">
+      <div class="env-body"></div>
+      <div class="env-flap-top">
+        <svg viewBox="0 0 130 46" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="0,0 130,0 65,46" fill="#2a1035" stroke="rgba(212,83,126,0.35)" stroke-width="1" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="env-seal">♥</div>
+      <div class="sparkle" style="width:4px;height:4px;left:18px;top:8px;animation-duration:1.9s;animation-delay:0.3s"></div>
+      <div class="sparkle" style="width:3px;height:3px;left:108px;top:15px;animation-duration:2.2s;animation-delay:0.8s"></div>
+      <div class="sparkle" style="width:4px;height:4px;left:60px;top:2px;animation-duration:1.7s;animation-delay:1.2s"></div>
+      <div class="sparkle" style="width:3px;height:3px;left:85px;top:5px;animation-duration:2s;animation-delay:1.6s"></div>
+    </div>
+    <div class="eyebrow">✦ para os dois ✦</div>
+    <div class="hero-name"><em>Quanto</em> você me conhece?</div>
+    <div class="ornament"><div class="orn-line"></div><div class="orn-dia"></div><div class="orn-line r"></div></div>
+    <div class="intro-text">Perguntas sobre a nossa história, memórias, coisas divertidas… e 😏</div>
+    <button class="cta" onclick="startQuiz()">Abrir a carta &rarr;</button>
+  </div>
+
+  <div class="screen" id="s-quiz">
+    <div class="tl" id="q-tl"></div>
+    <div class="q-tag" id="q-tag"></div>
+    <div class="q-tx" id="q-tx"></div>
+    <div class="opts" id="q-op"></div>
+    <div id="q-fb"></div>
+  </div>
+
+  <div class="screen" id="s-result">
+    <div class="score-ring">
+      <svg viewBox="0 0 100 100">
+        <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#d4537e"/><stop offset="100%" style="stop-color:#f0a0bc"/></linearGradient></defs>
+        <circle class="bg" cx="50" cy="50" r="44"/>
+        <circle class="fg" id="score-arc" cx="50" cy="50" r="44" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
+      </svg>
+      <div class="score-inner">
+        <div class="score-big" id="score-big">0</div>
+        <div class="score-denom" id="score-denom">de 10 acertos</div>
+      </div>
+    </div>
+    <div class="result-title" id="result-title"></div>
+    <div class="ornament"><div class="orn-line"></div><div class="orn-dia"></div><div class="orn-line r"></div></div>
+    <div class="result-msg" id="result-msg"></div>
+    <button class="btn-restart" onclick="startQuiz()">↺ Jogar de novo</button>
+  </div>
+</div>
+
+<script>
+const QS=[
+  {tag:"memoria",label:"Memória",q:"Em que ano a gente começou a namorar?",opts:["2017","2018","2019","2020"],c:2,fb:"2019 — Mas... 2018 tambem nao ta errado."},
+  {tag:"memoria",label:"Memória",q:"Onde foi nosso primeiro encontro como casal?",opts:["Restaurante","Cinema","Parque","Shopping"],c:1,fb:"Cinema — Não lembro do filme, mas sim de você."},
+  {tag:"memoria",label:"Memória",q:"Qual música nos dois associamos à nossa história?",opts:["Love Story","The Hills","Perfect","Lover"],c:1,fb:"The Hills — toda vez que toca, é impossível não trocar olhares."},
+  {tag:"sobre",label:"Sobre nós",q:"Qual é o nosso programa favorito juntos?",opts:["Sair pra comer","Dirigir sem destino","Ficar em casa juntinhos","Ver série"],c:2,fb:"Ficar juntinhos — Simples assim, e perfeito assim."},
+  {tag:"sobre",label:"Sobre nós",q:"Qual palavra define melhor a nossa relação?",opts:["Paixão","Cumplicidade","Bagunça","Equilíbrio"],c:3,fb:"Equilíbrio — um calmo e o outro bravo kkkk."},
+  {tag:"divertida",label:"Divertida 😄",q:"Se a gente fosse um prato, qual seria?",opts:["Sushi","Churrasco","Pizza","Fondue"],c:2,fb:"Pizza — Gostoso, sempre certo, e melhor compartilhado. 🍕"},
+  {tag:"divertida",label:"Divertida 😄",q:"Se eu fosse um animal, qual seria?",opts:["Gato","Raposa","Pinguim","Cachorro"],c:2,fb:"Pinguim — porque pinguins são FIEIS, escolhem um parceiro pra vida. 🐧"},
+  {tag:"divertida",label:"Divertida 😄",q:"Qual filme descreve melhor a nossa história?",opts:["Diário de uma paixão","Todo dia","Como eu era antes de você","Bela e a Fera"],c:3,fb:"Bela e a Fera — porque você e bela, é eu a fera. 🌹"},
+  {tag:"picante",label:"Picante 🔥",q:"Qual é o meu maior ponto fraco em você?",opts:["Seu toque","Seu cheiro","Seu sorriso","Sua voz"],c:2,fb:"Seu sorriso — Ele desarma tudo, mas seu cheiro e bom também. 😏"},
+  {tag:"picante",label:"Picante 🔥",q:"Qual parte sua eu olho primeiro quando te vejo?",opts:["Sua Bunda","Seu corpo","Seu olhar","Seu Peito"],c:2,fb:"Seu olhar — Ele fala tudo antes de você abrir a boca. 🥵"},
+];
+
+let cur=0,sc=0,answered=false;
+const cvs=document.getElementById('cvs'),ctx=cvs.getContext('2d');
+let W,H,stars=[],shooting=[];
+function resize(){W=cvs.width=window.innerWidth;H=cvs.height=window.innerHeight;}
+function mkStars(){stars=[];for(let i=0;i<80;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.2+0.2,a:Math.random(),da:(Math.random()-0.5)*0.007,col:Math.random()>.7?'255,180,210':'200,190,255'});}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  stars.forEach(s=>{s.a+=s.da;if(s.a<=0.05)s.da=Math.abs(s.da);if(s.a>=0.9)s.da=-Math.abs(s.da);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba('+s.col+','+s.a+')';ctx.fill();});
+  if(Math.random()<0.006)shooting.push({x:Math.random()*W*.7,y:Math.random()*H*.4,len:70+Math.random()*60,a:1,spd:5+Math.random()*4});
+  shooting.forEach(s=>{const g=ctx.createLinearGradient(s.x,s.y,s.x+s.len,s.y+s.len*.4);g.addColorStop(0,'rgba(240,160,192,0)');g.addColorStop(1,'rgba(240,160,192,'+s.a+')');ctx.strokeStyle=g;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x+s.len,s.y+s.len*.4);ctx.stroke();s.x+=s.spd;s.y+=s.spd*.4;s.a-=0.025;});
+  shooting=shooting.filter(s=>s.a>0);requestAnimationFrame(draw);
+}
+resize();mkStars();draw();
+window.addEventListener('resize',()=>{resize();mkStars();});
+
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function startQuiz(){cur=0;sc=0;go('s-quiz');renderQ();}
+
+function renderQ(){
+  answered=false;const q=QS[cur];
+  const tl=document.getElementById('q-tl');tl.innerHTML='';
+  QS.forEach((_,i)=>{
+    if(i>0){const l=document.createElement('div');l.className='tl-l';tl.appendChild(l);}
+    const d=document.createElement('div');d.className='tl-d'+(i<cur?' done':i===cur?' now':'');tl.appendChild(d);
+  });
+  document.getElementById('q-tag').innerHTML='<span class="tag-badge '+q.tag+'">'+q.label+'</span>';
+  document.getElementById('q-tx').textContent=q.q;
+  document.getElementById('q-fb').innerHTML='';
+  const op=document.getElementById('q-op');op.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=o;
+    b.onclick=()=>answer(i);op.appendChild(b);
+  });
+}
+
+function answer(i){
+  if(answered)return;answered=true;const q=QS[cur];
+  document.querySelectorAll('.opt').forEach((b,idx)=>{
+    b.classList.add('off');
+    if(idx===q.c)b.classList.add('correct');else b.classList.add('wrong');
+  });
+  if(i===q.c)sc++;
+
+  // feedback + botão próxima
+  const fb=document.createElement('div');fb.className='fb-box';
+  fb.innerHTML='<p>'+q.fb+'</p>';
+  document.getElementById('q-fb').appendChild(fb);
+
+  const isLast = cur === QS.length - 1;
+  const nextBtn=document.createElement('button');
+  nextBtn.className='next-btn';
+  nextBtn.innerHTML= isLast ? '✓ Ver resultado' : 'Próxima &rarr;';
+  nextBtn.onclick=()=>{cur++;if(cur<QS.length)renderQ();else showResult();};
+  document.getElementById('q-fb').appendChild(nextBtn);
+}
+
+function showResult(){
+  const pct=sc/QS.length;
+  document.getElementById('score-big').textContent=sc;
+  document.getElementById('score-denom').textContent='de '+QS.length+' acertos';
+  setTimeout(()=>{document.getElementById('score-arc').style.strokeDashoffset=276.5-(276.5*pct);},100);
+  let title,msg;
+  if(pct===1){title='Você nós conhece bem.';msg='Cada detalhe, cada memória.\nVocê guarda tudo. E isso me faz te amar mais do que consigo explicar.';}
+  else if(pct>=0.75){title='Quase tudo, quase 10.';msg='Pode ser que em um ou outro eu errei.\nO Mas aquilo que teve, desavensa eu corrigo.';}
+  else if(pct>=0.5){title='Tem muito ainda pra guardar.';msg='Ai já e muito pouco não? kkk.\nCalma, que ainda tem muito tempo para nós se conhecer de verdade.';}
+  else{title='Não acertou uma???';msg='O quiz mais facil voce nao acerta metade?\nNo proximo quiz, eu dou as repostas antes da pergunta.';}
+  document.getElementById('result-title').textContent=title;
+  const rm=document.getElementById('result-msg');rm.style.whiteSpace='pre-line';rm.textContent=msg;
+  go('s-result');
+}
+</script>
+</body>
+</html>
