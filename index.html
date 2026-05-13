@@ -136,13 +136,13 @@ html,body{height:100%;background:#080510}
 <script>
 const QS=[
   {tag:"memoria",label:"Memória",q:"Em que ano a gente começou a namorar?",opts:["2017","2018","2019","2020"],c:2,fb:"2019 — Mas... 2018 tambem nao ta errado."},
-  {tag:"memoria",label:"Memória",q:"Onde foi nosso primeiro encontro como casal?",opts:["Restaurante","Cinema","Parque","Shopping"],c:1,fb:"Cinema — Não lembro do filme, mas sim de você."},
-  {tag:"memoria",label:"Memória",q:"Qual música nos dois associamos à nossa história?",opts:["Love Story","The Hills","Perfect","Lover"],c:1,fb:"The Hills — toda vez que toca, é impossível não trocar olhares."},
-  {tag:"sobre",label:"Sobre nós",q:"Qual é o nosso programa favorito juntos?",opts:["Sair pra comer","Dirigir sem destino","Ficar em casa juntinhos","Ver série"],c:2,fb:"Ficar juntinhos — Simples assim, e perfeito assim."},
-  {tag:"sobre",label:"Sobre nós",q:"Qual palavra define melhor a nossa relação?",opts:["Paixão","Cumplicidade","Bagunça","Equilíbrio"],c:3,fb:"Equilíbrio — um calmo e o outro bravo kkkk."},
+  {tag:"memoria",label:"Memória",q:"Onde foi nosso primeiro encontro como casal?",opts:["Restaurante","Cinema","Parque","Shopping"],c:1,fb:"Cinema — Não lembro do filme, mas sim de você naquela noite. 🌙"},
+  {tag:"memoria",label:"Memória",q:"Qual música nos dois associamos à nossa história?",opts:["Love Story","The Hills","Perfect","Lover"],c:1,fb:"The Hills — Toda vez que toca, é impossível não trocar olhares. 🎵"},
+  {tag:"sobre",label:"Sobre nós",q:"Qual é o nosso programa favorito juntos?",opts:["Sair pra comer","Dirigir sem destino","Ficar juntinhos","Ver série"],c:2,fb:"Juntinhos — Simples assim, e perfeito assim. 💑"},
+  {tag:"sobre",label:"Sobre nós",q:"Qual palavra define melhor a nossa relação?",opts:["Paixão","Cumplicidade","Bagunça","Equilíbrio"],c:3,fb:"Equilíbrio — Um calmo e o outro bravo kkkk. 😡"},
   {tag:"divertida",label:"Divertida 😄",q:"Se a gente fosse um prato, qual seria?",opts:["Sushi","Churrasco","Pizza","Fondue"],c:2,fb:"Pizza — Gostoso, sempre certo, e melhor compartilhado. 🍕"},
-  {tag:"divertida",label:"Divertida 😄",q:"Se eu fosse um animal, qual seria?",opts:["Gato","Raposa","Pinguim","Cachorro"],c:2,fb:"Pinguim — porque pinguins são FIEIS, escolhem um parceiro pra vida. 🐧"},
-  {tag:"divertida",label:"Divertida 😄",q:"Qual filme descreve melhor a nossa história?",opts:["Diário de uma paixão","Todo dia","Como eu era antes de você","Bela e a Fera"],c:3,fb:"Bela e a Fera — porque você e bela, é eu a fera. 🌹"},
+  {tag:"divertida",label:"Divertida 😄",q:"Se eu fosse um animal, qual seria?",opts:["Gato","Raposa","Pinguim","Cachorro"],c:2,fb:"Pinguim — Porque pinguins são FIEIS, escolhem um parceiro pra vida. 🐧"},
+  {tag:"divertida",label:"Divertida 😄",q:"Qual filme descreve melhor a nossa história?",opts:["Diário de uma paixão","A Proposta","Crepúsculo","Bela e a Fera"],c:3,fb:"Bela e a Fera — Porque você só pode ser a bela, é eu a fera. 🌹"}, 
   {tag:"picante",label:"Picante 🔥",q:"Qual é o meu maior ponto fraco em você?",opts:["Seu toque","Seu cheiro","Seu sorriso","Sua voz"],c:2,fb:"Seu sorriso — Ele desarma tudo, mas seu cheiro e bom também. 😏"},
   {tag:"picante",label:"Picante 🔥",q:"Qual parte sua eu olho primeiro quando te vejo?",opts:["Sua Bunda","Seu corpo","Seu olhar","Seu Peito"],c:2,fb:"Seu olhar — Ele fala tudo antes de você abrir a boca. 🥵"},
 ];
@@ -212,7 +212,7 @@ function showResult(){
   if(pct===1){title='Você nós conhece bem.';msg='Cada detalhe, cada memória.\nVocê guarda tudo. E isso me faz te amar mais do que consigo explicar.';}
   else if(pct>=0.75){title='Quase tudo, quase 10.';msg='Pode ser que em um ou outro eu errei.\nO Mas aquilo que teve, desavensa eu corrigo.';}
   else if(pct>=0.5){title='Tem muito ainda pra guardar.';msg='Ai já e muito pouco não? kkk.\nCalma, que ainda tem muito tempo para nós se conhecer de verdade.';}
-  else{title='Não acertou uma???';msg='O quiz mais facil voce nao acerta metade?\nNo proximo quiz, eu dou as repostas antes da pergunta.';}
+  else{title='Não acertou uma???';msg='O quiz mais fácil você näo acerta metade?\nNo próximo quiz, eu dou as repostas antes da pergunta.';}
   document.getElementById('result-title').textContent=title;
   const rm=document.getElementById('result-msg');rm.style.whiteSpace='pre-line';rm.textContent=msg;
   go('s-result');
